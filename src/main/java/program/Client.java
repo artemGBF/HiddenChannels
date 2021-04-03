@@ -3,10 +3,8 @@ package program;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Client {

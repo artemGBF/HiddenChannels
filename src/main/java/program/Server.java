@@ -22,13 +22,15 @@ public class Server {
                 InputStream in = clientSocket.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String countPackages = br.readLine();
+                System.out.println("countPackages = " + countPackages);
                 String buffSize = br.readLine();
+                System.out.println("buffSize = " + buffSize);
                 try {
                     int check = 0;
                     while (check != Integer.parseInt(countPackages)) {
                         check++;
                         long l = System.currentTimeMillis();
-                        byte[] bytesN = in.readNBytes(Integer.parseInt(buffSize));
+                        in.readNBytes(Integer.parseInt(buffSize));
                         long l1 = System.currentTimeMillis();
                         long diff = l1 - l;
                         if (diff > 600) {

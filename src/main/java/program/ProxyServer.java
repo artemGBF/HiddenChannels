@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,12 +19,19 @@ public class ProxyServer {
         InputStream in = sock.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         int countBytes = Integer.parseInt(br.readLine());
-        byte[] content = br.readLine().getBytes();
+        String line = "";
+        while (br.ready()) {
+            line += br.readLine();
+        }
+        byte[] content = line.getBytes();
+        System.out.println(new String(content));
 
         String secretBinary = convertStringToBinary("line");
         int countOnes = countOnes(secretBinary);
-        int buffSize = countBytes / countOnes - 1;
+        int buffSize = countBytes / countOnes;
         System.out.println(secretBinary);
+        System.out.println("buffSize = " + buffSize);
+        System.out.println("coutntOnes = " + countOnes);
 
         BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         outputStream.write(countOnes + "\n");
@@ -33,31 +39,19 @@ public class ProxyServer {
         outputStream.write(buffSize + "\n");
         outputStream.flush();
 
-        for (int i = 0, j = 0; i < secretBinary.length()+countOnes; i++) {
+        for (int i = 0, j = 0; i < secretBinary.length() /*+ countOnes*/; i++) {
             if (secretBinary.charAt(i) == '1') {
-                Thread.sleep(250);
                 byte[] bytesN = Arrays.copyOfRange(content, j, j + buffSize);
                 String word = new String(bytesN);
                 j += buffSize;
+                System.out.println(j);
                 outputStream.write(word);
                 outputStream.flush();
-                Thread.sleep(250);
+                Thread.sleep(500);
             } else {
                 Thread.sleep(520);
             }
         }
-
-        /*Socket sck = new Socket("localhost", 4005);
-        PrintStream ps = new PrintStream(sock.getOutputStream());*/
-
-        /*boolean waiting = true;
-        while (waiting) {
-            if (message != null) {
-                ps.println("Hey Server, Client says: " + message);
-                waiting = false;
-            }
-        }
-        sock.close();*/
     }
 
     public static int countOnes(String binary) {

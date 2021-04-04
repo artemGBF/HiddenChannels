@@ -1,4 +1,4 @@
-package program;
+package lab1;
 
 import java.io.BufferedReader;
 import java.io.IOException;

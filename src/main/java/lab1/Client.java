@@ -1,4 +1,4 @@
-package program;
+package lab1;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
